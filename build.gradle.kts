@@ -67,13 +67,14 @@ tasks.runServer {
 
 tasks.jar {
     val include = setOf(
-        "kotlin-stdlib-${getKotlinPluginVersion()}.jar",
-        "kotlinx-coroutines-core-${coroutineLibVersion}.jar",
-        "Skedule-1.2.6.jar"
+        "kotlin",
+        "Skedule"
     )
 
+    duplicatesStrategy = DuplicatesStrategy.WARN
+
     configurations.runtimeClasspath.get()
-        .filter { it.name in include }
+        .filter { bt -> include.any { bt.name.contains(it, true) } }
         .map { zipTree(it) }
         .also { from(it) }
 }

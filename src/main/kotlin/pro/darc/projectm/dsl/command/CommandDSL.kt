@@ -63,6 +63,14 @@ open class CommandDSL (
             it.usageMessage = this.usageMessage
         }
     }
+
+    inline fun command(
+        name: String,
+        vararg aliases: String = arrayOf(),
+        block: CommandBuilderBlock,
+    ): CommandDSL {
+        return subCommandBuilder(name, *aliases).apply(block).also { subCommands.add(it) }
+    }
     // end subcommand
 
     // start dispatch command by executor type
