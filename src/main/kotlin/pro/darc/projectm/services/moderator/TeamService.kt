@@ -112,6 +112,7 @@ class TeamService: Listener,
 
     private fun loadFromFile() {
         val targetFile = File(plugin.dataFolder, "team.csv")
+        if (!targetFile.exists()) return
         val lines = targetFile.readLines()
         for (line in lines) {
             val s = line.split(',')
