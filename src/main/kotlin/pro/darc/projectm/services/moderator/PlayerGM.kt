@@ -145,8 +145,8 @@ class PlayerGM: Listener {
     fun evtEntityDamageByEntity(event: EntityDamageByEntityEvent) {
         if (event.entityType == EntityType.PLAYER) {
             if (!allowPvP) {
-                event.isCancelled = true
                 if (event.damager is Player) {
+                    event.isCancelled = true
                     (event.damager as Player).sendMessage("PvP禁用中".toComponent().withErrorColor().withPrefix())
                 }
             }
