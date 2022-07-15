@@ -8,7 +8,9 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.permissions.Permissible
@@ -39,6 +41,7 @@ class PlayerGM: Listener {
 
     init {
         server.pluginManager.registerEvents(this, ProjectMCoreMain.instance)
+        server.pluginManager.registerEvents(teamService, ProjectMCoreMain.instance)
 
         command("gm", plugin = ProjectMCoreMain.instance) {
             permission = "projectm.stuff"
@@ -58,9 +61,9 @@ class PlayerGM: Listener {
 
                 executorPlayer {
                     sender.sendMessage("是否要重新导入组队表,请输入<是>来确认操作".toComponent().withPrefix())
-                    val input = commandPlayerEventFlow<AsyncChatEvent>().first().message()
+                    val input = commandPlayerEventFlow<AsyncPlayerChatEvent>().first().message
 
-                    if (input.contains("是".toComponent())) {
+                    if (input.contentEquals("是")) {
                         teamService.loadFromFile()
                         sender.sendMessage("导入分组成功".toComponent().withSuccessColor().withPrefix())
                     } else {
@@ -136,11 +139,16 @@ class PlayerGM: Listener {
             event.isCancelled = true
             return
         }
+    }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun evtEntityDamageByEntity(event: EntityDamageByEntityEvent) {
         if (event.entityType == EntityType.PLAYER) {
             if (!allowPvP) {
                 event.isCancelled = true
-                (event.entity as Player).sendMessage("PvP禁用中".toComponent().withErrorColor().withPrefix())
+                if (event.damager is Player) {
+                    (event.damager as Player).sendMessage("PvP禁用中".toComponent().withErrorColor().withPrefix())
+                }
             }
         }
     }

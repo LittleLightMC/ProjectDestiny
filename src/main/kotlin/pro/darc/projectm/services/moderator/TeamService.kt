@@ -7,9 +7,13 @@ import com.comphenix.protocol.events.PacketAdapter
 import com.comphenix.protocol.events.PacketEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.scoreboard.Team
 import pro.darc.projectm.ProjectMCoreMain
+import pro.darc.projectm.dsl.Log
 import pro.darc.projectm.extension.*
 import java.io.File
 import java.util.UUID
@@ -121,9 +125,13 @@ class TeamService: Listener,
         val lines = targetFile.readLines()
         for (line in lines) {
             val s = line.split(',')
-            val playerInfo = PlayerTeamInfo(UUID.fromString(s[0]), TeamMark.valueOf(s[1]))
-            playerTeamInfo.add(playerInfo)
-            minecraftTeam[playerInfo.team.id]?.addPlayer(Bukkit.getOfflinePlayer(playerInfo.uuid))
+            try {
+                val playerInfo = PlayerTeamInfo( UUID.fromString(s[0]), TeamMark.valueOf(s[1]))
+                playerTeamInfo.add(playerInfo)
+                Bukkit.getOfflinePlayer(playerInfo.uuid).let { it.name?.let { _ -> minecraftTeam[playerInfo.team.id]?.addPlayer(it) } }
+            } catch (e: java.lang.IllegalArgumentException) {
+                Log.warning("导入${line}的时候发生了错误(大概率是UUID格式问题)")
+            }
         }
         needInit = false
     }
@@ -133,5 +141,14 @@ class TeamService: Listener,
     fun getPlayerTeam(player: Player): TeamMark = playerTeamInfo.firstOrNull { it.uuid == player.uniqueId }?.team ?: TeamMark.TEAM_NONE
 
     override fun onPacketSending(event: PacketEvent?) {
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    fun evtPlayerJoin(event: PlayerJoinEvent) {
+        event.joinMessage(null)
+        val team = getPlayerTeam(event.player)
+        if (team != TeamMark.TEAM_NONE) {
+            minecraftTeam[team.id]?.addPlayer(event.player)
+        }
     }
 }
