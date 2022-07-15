@@ -5,11 +5,14 @@ import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.events.ListenerPriority
 import com.comphenix.protocol.events.PacketAdapter
 import com.comphenix.protocol.events.PacketEvent
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import org.bukkit.scoreboard.Team
 import pro.darc.projectm.ProjectMCoreMain
 import pro.darc.projectm.extension.*
+import pro.darc.projectm.utils.SimpleConfigManager
+import java.io.File
 import java.util.UUID
 
 enum class TeamMark(val id: Int) {
@@ -39,6 +42,7 @@ class TeamService: Listener,
     private val minecraftTeam: Map<Int, Team>
     var needInit: Boolean = true
         private set
+    private val configurationManager: SimpleConfigManager = SimpleConfigManager(ProjectMCoreMain.instance)
 
     init {
         protocolManager.addPacketListener(this)
@@ -62,10 +66,11 @@ class TeamService: Listener,
                 prefix("流放| ".toComponent())
             }),
         )
+        loadFromFile()
     }
 
     fun makeTeam() {
-        val players = onlinePlayers.toMutableList()
+        val players = onlinePlayers.filter { player -> !player.isStuff }.toMutableList()
         val eachTeamNum = onlinePlayers.size / 4
         for (team in TeamMark.TEAM_PLAIN.id downTo TeamMark.TEAM_JUNGLE.id) {
             for (i in eachTeamNum downTo 1) {
@@ -92,7 +97,28 @@ class TeamService: Listener,
             )
             minecraftTeam[randomTeam.id]?.addPlayer(player)
         }
+        saveToFile()
         needInit = false
+    }
+
+    private fun saveToFile() {
+        val targetFile = File(plugin.dataFolder, "team.csv")
+        var text = ""
+        for (i in playerTeamInfo) {
+            text += "${i.uuid},${i.team.name}\n"
+        }
+        targetFile.writeText(text)
+    }
+
+    private fun loadFromFile() {
+        val targetFile = File(plugin.dataFolder, "team.csv")
+        val lines = targetFile.readLines()
+        for (line in lines) {
+            val s = line.split(',')
+            val playerInfo = PlayerTeamInfo(UUID.fromString(s[0]), TeamMark.valueOf(s[1]))
+            playerTeamInfo.add(playerInfo)
+            minecraftTeam[playerInfo.team.id]?.addPlayer(Bukkit.getOfflinePlayer(playerInfo.uuid))
+        }
     }
 
     fun getPlayerInfo(): List<PlayerTeamInfo> = playerTeamInfo
