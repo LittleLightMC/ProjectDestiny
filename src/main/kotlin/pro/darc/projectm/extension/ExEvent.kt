@@ -1,12 +1,16 @@
 package pro.darc.projectm.extension
 
 import org.bukkit.Bukkit
-import org.bukkit.event.*
+import org.bukkit.event.Event
+import org.bukkit.event.EventPriority
+import org.bukkit.event.HandlerList
+import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.plugin.Plugin
 import pro.darc.projectm.ProjectMCoreMain
 import pro.darc.projectm.dsl.ProjectMCore
 import kotlin.reflect.KClass
+
 
 fun <T : Event> KListener.event(
     type: KClass<T>,
@@ -57,3 +61,12 @@ val PlayerMoveEvent.displaced: Boolean
 
 interface KListener: Listener
 class SimpleKListener : KListener, ProjectMCore()
+
+open class BasicEvent: Event() {
+    private val handlerList = HandlerList()
+    override fun getHandlers(): HandlerList {
+        return handlerList
+    }
+}
+
+class PluginEnabledEvent: BasicEvent()

@@ -7,8 +7,8 @@ import pro.darc.projectm.extension.toComponent
 import pro.darc.projectm.extension.withErrorColor
 import pro.darc.projectm.extension.withPrefix
 
-val MISSING_RANGE_PARAMETER = "<underline>未找到范围参数".toComponent().withErrorColor().withPrefix()
-val INT_RANGE_FORMAT = "<underline>范围参数错误".toComponent().withErrorColor().withPrefix()
+val MISSING_RANGE_PARAMETER = "未找到范围参数".toComponent().withErrorColor().withPrefix()
+val INT_RANGE_FORMAT = "范围参数错误".toComponent().withErrorColor().withPrefix()
 
 /**
  * Returns [IntRange] or null if was not able to parse to IntRange given the [separator].

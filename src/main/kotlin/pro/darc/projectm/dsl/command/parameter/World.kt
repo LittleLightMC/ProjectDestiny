@@ -14,8 +14,8 @@ import pro.darc.projectm.extension.withPrefix
 
 // WORLD
 
-val MISSING_WORLD_ARGUMENT = "<underline>未输入世界参数".toComponent().withErrorColor().withPrefix()
-val WORLD_NOT_FOUND = "<underline>未找到世界".toComponent().withErrorColor().withPrefix()
+val MISSING_WORLD_ARGUMENT = "未输入世界参数".toComponent().withErrorColor().withPrefix()
+val WORLD_NOT_FOUND = "未找到世界".toComponent().withErrorColor().withPrefix()
 
 /**
  * Returns [World] or null if was not found.
@@ -41,8 +41,8 @@ fun TabCompleter.world(
 
 // COORDINATE
 
-val MISSING_COORDINATE_ARGUMENT = "<underline>未找到坐标参数".toComponent().withErrorColor().withPrefix()
-val COORDINATE_NUMBER_FORMAT = "<underline>错误的坐标参数".toComponent().withErrorColor().withPrefix()
+val MISSING_COORDINATE_ARGUMENT = "未找到坐标参数".toComponent().withErrorColor().withPrefix()
+val COORDINATE_NUMBER_FORMAT = "错误的坐标参数".toComponent().withErrorColor().withPrefix()
 
 fun Executor<Player>.coordinate(
     xIndex: Int, yIndex: Int, zIndex: Int,

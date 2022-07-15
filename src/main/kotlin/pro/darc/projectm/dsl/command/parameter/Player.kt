@@ -14,8 +14,8 @@ import java.util.*
 
 // PLAYER
 
-val PLAYER_MISSING_PARAMETER = "<underline>未输入玩家参数".toComponent().withErrorColor().withPrefix()
-val PLAYER_NOT_ONLINE = "<underline>错误的玩家参数".toComponent().withErrorColor().withPrefix()
+val PLAYER_MISSING_PARAMETER = "未输入玩家参数".toComponent().withErrorColor().withPrefix()
+val PLAYER_NOT_ONLINE = "错误的玩家参数".toComponent().withErrorColor().withPrefix()
 
 /**
  * returns a [Player] or null if the player is not online.
@@ -51,8 +51,8 @@ fun Executor<*>.offlinePlayer(
 
 // GAMEMODE
 
-val GAMEMODE_MISSING_PARAMETER = "<underline>缺少游戏模式参数".toComponent().withErrorColor().withPrefix()
-val GAMEMODE_NOT_FOUND = "<underline>不存在的游戏模式".toComponent().withErrorColor().withPrefix()
+val GAMEMODE_MISSING_PARAMETER = "缺少游戏模式参数".toComponent().withErrorColor().withPrefix()
+val GAMEMODE_NOT_FOUND = "不存在的游戏模式".toComponent().withErrorColor().withPrefix()
 
 /**
  * returns a [GameMode] or null if was not found.

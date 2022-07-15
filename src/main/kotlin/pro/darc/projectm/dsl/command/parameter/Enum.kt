@@ -8,8 +8,8 @@ import pro.darc.projectm.extension.toComponent
 import pro.darc.projectm.extension.withErrorColor
 import pro.darc.projectm.extension.withPrefix
 
-val MISSING_ENUM_PARAMETER = "<underline>错误的选项".toComponent().withErrorColor().withPrefix()
-val ENUM_VALUE_NOT_FOUND = "<underline>填写了不存在的选项".toComponent().withErrorColor().withPrefix()
+val MISSING_ENUM_PARAMETER = "错误的选项".toComponent().withErrorColor().withPrefix()
+val ENUM_VALUE_NOT_FOUND = "填写了不存在的选项".toComponent().withErrorColor().withPrefix()
 
 /**
  * Returns [T] or null if was not able to find in the [Enum].

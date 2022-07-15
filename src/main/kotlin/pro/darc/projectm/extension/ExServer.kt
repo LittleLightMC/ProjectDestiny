@@ -54,7 +54,7 @@ val messenger: Messenger get() = server.messenger
 val monsterSpawnLimit: Int get() = server.monsterSpawnLimit
 val animalSpawnLimit: Int get() = server.animalSpawnLimit
 val ambientSpawnLimit: Int get() = server.ambientSpawnLimit
-val scoreboardManager: ScoreboardManager get() = server.scoreboardManager!!
+val scoreboardManager: ScoreboardManager get() = Bukkit.getScoreboardManager()
 
 var idleTimeout: Int
     get() = server.idleTimeout

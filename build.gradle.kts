@@ -15,6 +15,7 @@ group = "pro.darc"
 version = "1.0-SNAPSHOT"
 
 val coroutineLibVersion = "1.6.3"
+val ktormVersion = "3.5.0"
 
 repositories {
     maven("https://maven.aliyun.com/repository/public")
@@ -30,6 +31,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${getKotlinPluginVersion()}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutineLibVersion}")
     implementation("com.github.LittleLightMC:Skedule:1.2.6")
+    implementation("org.ktorm:ktorm-core:${ktormVersion}")
+    implementation("org.ktorm:ktorm-support-sqlite:${ktormVersion}")
+    implementation("org.apache.commons:commons-dbcp2:2.9.0")
 //    compileOnly("org.spigotmc", "spigot-api", "1.19-R0.1-SNAPSHOT")
 //    compileOnly("org.bukkit", "bukkit", "1.19-R0.1-SNAPSHOT")
 //    compileOnly("org.bukkit", "craftbukkit", "1.19-R0.1-SNAPSHOT")
@@ -80,7 +84,7 @@ tasks.jar {
 }
 
 bukkit {
-    load = BukkitPluginDescription.PluginLoadOrder.STARTUP
+    load = BukkitPluginDescription.PluginLoadOrder.POSTWORLD
     main = "pro.darc.projectm.ProjectMCoreMain"
     apiVersion = "1.19"
     authors = listOf("DarcJC")

@@ -12,8 +12,8 @@ import java.util.*
 
 // MATERIAL
 
-val MATERIAL_NOT_FOUND = "<underline>未找到该物品".toComponent().withErrorColor().withPrefix()
-val MATERIAL_MISSING_PARAMETER = "<underline>未输入物品参数".toComponent().withErrorColor().withPrefix()
+val MATERIAL_NOT_FOUND = "未找到该物品".toComponent().withErrorColor().withPrefix()
+val MATERIAL_MISSING_PARAMETER = "未输入物品参数".toComponent().withErrorColor().withPrefix()
 
 private fun toMaterial(string: String) = Material.getMaterial(string.uppercase(Locale.getDefault()))
 
@@ -43,7 +43,7 @@ fun TabCompleter.material(
 
 // MATERIAL DATA
 
-val DATA_FORMAT = "<underline>物品数据必须为数字".toComponent().withErrorColor().withPrefix()
+val DATA_FORMAT = "物品数据必须为数字".toComponent().withErrorColor().withPrefix()
 
 fun Executor<*>.blockDataOrNull(
     index: Int,
