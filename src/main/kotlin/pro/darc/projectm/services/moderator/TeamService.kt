@@ -11,7 +11,6 @@ import org.bukkit.event.Listener
 import org.bukkit.scoreboard.Team
 import pro.darc.projectm.ProjectMCoreMain
 import pro.darc.projectm.extension.*
-import pro.darc.projectm.utils.SimpleConfigManager
 import java.io.File
 import java.util.UUID
 
@@ -42,7 +41,6 @@ class TeamService: Listener,
     private val minecraftTeam: Map<Int, Team>
     var needInit: Boolean = true
         private set
-    private val configurationManager: SimpleConfigManager = SimpleConfigManager(ProjectMCoreMain.instance)
 
     init {
         protocolManager.addPacketListener(this)
