@@ -24,7 +24,7 @@ class TabCompleter(
 )
 
 open class CommandDSL (
-    private val plugin: Plugin,
+    val plugin: Plugin,
     name: String,
     vararg aliases: String = arrayOf(),
     private var executor: ExecutorBlock<CommandSender>? = null,

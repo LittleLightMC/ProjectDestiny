@@ -38,12 +38,16 @@ class TeamService: Listener,
 
     private val playerTeamInfo: MutableList<PlayerTeamInfo> = mutableListOf()
     private val protocolManager = ProtocolLibrary.getProtocolManager()
-    private val minecraftTeam: Map<Int, Team>
+    private lateinit var minecraftTeam: Map<Int, Team>
     var needInit: Boolean = true
         private set
 
     init {
         protocolManager.addPacketListener(this)
+        initMinecraftTeam()
+    }
+
+    private fun initMinecraftTeam() {
         for (team in TeamMark.values()) {
             scoreboardManager.mainScoreboard.getTeam(team.name)?.unregister()
         }
@@ -64,10 +68,11 @@ class TeamService: Listener,
                 prefix("流放| ".toComponent())
             }),
         )
-        loadFromFile()
     }
 
     fun makeTeam() {
+        initMinecraftTeam()
+        playerTeamInfo.clear()
         val players = onlinePlayers.filter { player -> !player.isStuff }.toMutableList()
         val eachTeamNum = onlinePlayers.size / 4
         for (team in TeamMark.TEAM_PLAIN.id downTo TeamMark.TEAM_JUNGLE.id) {
@@ -108,9 +113,11 @@ class TeamService: Listener,
         targetFile.writeText(text)
     }
 
-    private fun loadFromFile() {
+    fun loadFromFile() {
         val targetFile = File(plugin.dataFolder, "team.csv")
         if (!targetFile.exists()) return
+        initMinecraftTeam()
+        playerTeamInfo.clear()
         val lines = targetFile.readLines()
         for (line in lines) {
             val s = line.split(',')
@@ -118,6 +125,7 @@ class TeamService: Listener,
             playerTeamInfo.add(playerInfo)
             minecraftTeam[playerInfo.team.id]?.addPlayer(Bukkit.getOfflinePlayer(playerInfo.uuid))
         }
+        needInit = false
     }
 
     fun getPlayerInfo(): List<PlayerTeamInfo> = playerTeamInfo

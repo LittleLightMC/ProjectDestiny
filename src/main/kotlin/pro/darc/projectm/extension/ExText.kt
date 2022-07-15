@@ -17,3 +17,5 @@ fun Component.withPrefix() = prefix.append(this)
 fun Component.withColor(color: Int) = color(TextColor.color(color))
 
 fun Component.withErrorColor() = withColor(0xFF6347)
+
+fun Component.withSuccessColor() = withColor(0x7fffd4)
