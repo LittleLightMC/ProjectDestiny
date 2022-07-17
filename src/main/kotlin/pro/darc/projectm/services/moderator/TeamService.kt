@@ -4,12 +4,15 @@ import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.events.ListenerPriority
 import com.comphenix.protocol.events.PacketAdapter
+import com.comphenix.protocol.events.PacketContainer
 import com.comphenix.protocol.events.PacketEvent
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerGameModeChangeEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.scoreboard.Team
 import pro.darc.projectm.ProjectMCoreMain
@@ -30,14 +33,15 @@ enum class TeamMark(val id: Int) {
 
 data class PlayerTeamInfo (
     val uuid: UUID,
-    val team: TeamMark
+    var team: TeamMark
 )
 
 class TeamService: Listener,
     PacketAdapter(
         ProjectMCoreMain.instance,
         ListenerPriority.HIGH,
-        PacketType.Play.Server.NAMED_ENTITY_SPAWN
+        PacketType.Play.Server.NAMED_ENTITY_SPAWN,
+        PacketType.Play.Server.PLAYER_INFO,
     ) {
 
     private val playerTeamInfo: MutableList<PlayerTeamInfo> = mutableListOf()
@@ -140,7 +144,23 @@ class TeamService: Listener,
 
     fun getPlayerTeam(player: Player): TeamMark = playerTeamInfo.firstOrNull { it.uuid == player.uniqueId }?.team ?: TeamMark.TEAM_NONE
 
-    override fun onPacketSending(event: PacketEvent?) {
+    fun setPlayerTeam(player: Player, team: TeamMark) {
+        var playerInfo = playerTeamInfo.firstOrNull { it.uuid == player.uniqueId }
+        if (playerInfo == null) {
+            playerInfo = PlayerTeamInfo(player.uniqueId, team)
+            playerTeamInfo.add(playerInfo)
+        }
+        scoreboardManager.mainScoreboard.getPlayerTeam(player)?.removePlayer(player)
+        minecraftTeam[playerInfo.team.id]?.addPlayer(player)
+    }
+
+    override fun onPacketSending(event: PacketEvent) {
+        val packet = event.packet
+        when (event.packetType) {
+            PacketType.Play.Server.NAMED_ENTITY_SPAWN -> {}
+            PacketType.Play.Server.PLAYER_INFO -> {
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -149,6 +169,14 @@ class TeamService: Listener,
         val team = getPlayerTeam(event.player)
         if (team != TeamMark.TEAM_NONE) {
             minecraftTeam[team.id]?.addPlayer(event.player)
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun evtPlayerModeChange(event: PlayerGameModeChangeEvent) {
+        if (event.newGameMode != GameMode.SPECTATOR && event.player.isStuff && !event.player.isOperator) {
+            event.isCancelled = true
+            event.player.sendMessage("${event.cause}将你设为了${event.newGameMode}, 此行为已被阻止".toComponent().withSuccessColor().withPrefix())
         }
     }
 }

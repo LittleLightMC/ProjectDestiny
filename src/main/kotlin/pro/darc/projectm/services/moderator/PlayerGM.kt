@@ -16,15 +16,16 @@ import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.permissions.Permissible
 import pro.darc.projectm.ProjectMCoreMain
 import pro.darc.projectm.dsl.command.command
-import pro.darc.projectm.dsl.command.parameter.boolean
-import pro.darc.projectm.dsl.command.parameter.gameMode
-import pro.darc.projectm.dsl.command.parameter.playerOrNull
+import pro.darc.projectm.dsl.command.parameter.*
 import pro.darc.projectm.dsl.flow.commandPlayerEventFlow
 import pro.darc.projectm.dsl.server
 import pro.darc.projectm.extension.*
 
 val Permissible.isStuff: Boolean
     get() = hasPermission("projectm.stuff") || isOp
+
+val Permissible.isOperator: Boolean
+    get() = hasPermission("projectm.operator")
 
 class PlayerGM: Listener {
 
@@ -119,6 +120,23 @@ class PlayerGM: Listener {
                     sender.sendMessage("PvP已被设置为${flag}".toComponent().withSuccessColor().withPrefix())
                 }
             }
+
+//            command("setteam") {
+//                permission = "projectm.operator"
+//                permissionMessage("只有服务器管理员有权限操作".toComponent().withErrorColor().withPrefix())
+//
+//                executor {
+//                    val target = player(0)
+//                    val team = enum<TeamMark>(1)
+//
+//                    if (target.isStuff) {
+//                        sender.sendMessage("不能给工作人员分配用户组".toComponent().withErrorColor().withPrefix())
+//                    } else {
+//                        teamService.setPlayerTeam(target, team)
+//                        sender.sendMessage("已将玩家的队伍设置为${team.name}".toComponent().withErrorColor().withPrefix())
+//                    }
+//                }
+//            }
         }
     }
 
