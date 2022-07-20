@@ -24,19 +24,24 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
     implementation("net.kyori", "adventure-api", "4.11.0")
     compileOnly("com.comphenix.protocol", "ProtocolLib", "4.7.0")
     paperDevBundle("1.19-R0.1-SNAPSHOT")
+
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${getKotlinPluginVersion()}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutineLibVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.20")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    implementation("com.charleskorn.kaml:kaml:0.46.0")
+
     implementation("com.github.LittleLightMC:Skedule:1.2.6")
-    implementation("org.ktorm:ktorm-core:${ktormVersion}")
-    implementation("org.ktorm:ktorm-support-sqlite:${ktormVersion}")
-    implementation("org.apache.commons:commons-dbcp2:2.9.0")
-//    compileOnly("org.spigotmc", "spigot-api", "1.19-R0.1-SNAPSHOT")
-//    compileOnly("org.bukkit", "bukkit", "1.19-R0.1-SNAPSHOT")
-//    compileOnly("org.bukkit", "craftbukkit", "1.19-R0.1-SNAPSHOT")
+    implementation("org.redisson:redisson:3.17.4")
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 tasks.test {
@@ -72,7 +77,9 @@ tasks.runServer {
 tasks.jar {
     val include = setOf(
         "kotlin",
-        "Skedule"
+        "Skedule",
+        "kaml",
+        "yaml"
     )
 
     duplicatesStrategy = DuplicatesStrategy.WARN
