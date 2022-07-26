@@ -1,11 +1,27 @@
 package pro.darc.projectm.services.social
 
-class SocialService {
+import pro.darc.projectm.dsl.Log
+import pro.darc.projectm.provider.conf.WithConfiguration
+import pro.darc.projectm.provider.conf.getDefaultConfiguration
+import pro.darc.projectm.provider.conf.models.SocialConfig
+import pro.darc.projectm.services.CoreService
 
-    val DisplayNameModule = DisplayName()
+class SocialService: CoreService(), WithConfiguration {
 
-    /* Initializing SocialService */
+    lateinit var socialConfig: SocialConfig
+
     init {
-        println("SocialService loaded")
+    }
+
+    override fun onLoad() {
+        Log.info("load")
+        socialConfig = getDefaultConfiguration()
+    }
+
+    override fun onStart() {
+    }
+
+    override fun onStop() {
+        Log.info("stop")
     }
 }

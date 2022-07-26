@@ -5,6 +5,7 @@ import pro.darc.projectm.provider.conf.WithConfiguration
 import pro.darc.projectm.provider.conf.getDefaultConfiguration
 import pro.darc.projectm.provider.conf.models.GlobalConfig
 import pro.darc.projectm.provider.conf.saveConfigurationDefaultPath
+import pro.darc.projectm.services.ServiceManager
 import pro.darc.projectm.services.social.SocialService
 
 class ProjectMCoreMain : JavaPlugin(), WithConfiguration {
@@ -15,13 +16,18 @@ class ProjectMCoreMain : JavaPlugin(), WithConfiguration {
 
     override fun onEnable() {
         dataFolder.mkdirs()
-
-        socialService = SocialService()
         globalConfig = getDefaultConfiguration()
+
+        ServiceManager.enableServices()
     }
 
     override fun onDisable() {
+        ServiceManager.disableServices()
         saveConfigurationDefaultPath(globalConfig)
+    }
+
+    override fun onLoad() {
+        ServiceManager.loadServices()
     }
 
     companion object {

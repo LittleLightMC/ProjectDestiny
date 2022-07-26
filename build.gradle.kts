@@ -4,9 +4,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `java-library`
+    `maven-publish`
     kotlin("jvm") version "1.7.0"
     kotlin("plugin.serialization") version "1.7.0"
-    id("io.papermc.paperweight.userdev") version "1.3.7"
+    id("io.papermc.paperweight.userdev") version "1.3.8"
     id("xyz.jpenilla.run-paper") version "1.0.6"
     id("net.minecrell.plugin-yml.bukkit") version "0.5.2"
 }
@@ -20,12 +21,17 @@ val ktormVersion = "3.5.0"
 repositories {
     maven("https://maven.aliyun.com/repository/public")
     maven("https://repo.dmulloy2.net/repository/public/")
+    maven("https://repo.md-5.net/content/groups/public/")
+    maven("https://build.darc.pro/plugin/repository/everything/")
     maven("https://jitpack.io")
 }
 
 dependencies {
     implementation("net.kyori", "adventure-api", "4.11.0")
     compileOnly("com.comphenix.protocol", "ProtocolLib", "4.7.0")
+    compileOnly("LibsDisguises", "LibsDisguises", "10.0.29")
+    compileOnly("net.luckperms:api:5.4")
+    compileOnly("com.nametagedit:nametagedit:4.5.8")
     paperDevBundle("1.19-R0.1-SNAPSHOT")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${getKotlinPluginVersion()}")
